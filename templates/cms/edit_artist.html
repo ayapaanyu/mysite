@@ -1,0 +1,33 @@
+{% extends 'cms/base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title_block %}
+    Edit_{{ artist.name }}
+{% endblock %}
+
+{% block body_block %}
+<div>
+    {% if artist %}
+        <h2>{{ artist.name }}</h2>
+        <br>
+        <form id="artist_form" method="post" action="">
+            <div class="well well-lg">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+            </div>
+            <br/>
+            <button class="btn btn-primary" type="submit" name="submit">Update</button>
+            <a href="{% url 'edit_artist_search' %}" class="btn btn-default">Cancel</a>
+        </form>
+
+    {% else %}
+        The specified artist does not exist!
+    {% endif %}
+
+
+</div>
+{% endblock %}
+
+
+

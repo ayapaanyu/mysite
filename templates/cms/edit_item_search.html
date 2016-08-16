@@ -1,0 +1,142 @@
+{% extends "cms/base.html" %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title_block %} Edit Item{% endblock %}
+
+{% block body_block %}
+    <div class="page-header">
+        <h1>Edit Item</h1>
+    </div>
+
+    <div class="container">
+        <form id="general" method="get" action="{% url 'restricted' %}">
+            {% csrf_token %}
+            {% bootstrap_form general_form %}
+            <button class="btn btn-primary" type="submit" name="general" value="general">Edit Search</button>
+        </form>
+    </div>
+
+    <div class="container">
+        {% if paged_items %}
+        <div class="pull-right">
+            {{ paged_items.start_index }} to {{ paged_items.end_index }} of {{ paged_items.paginator.count }}
+        </div>
+        <form method="get" action="{% url 'delete_item' %}">
+        <table class="table">
+            <thead>
+              <tr>
+                <th></th>
+                <th></th>
+                <th>Item ID</th>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Place</th>
+                <th>Date</th>
+                <th>Artist</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+                {% for paged_item in paged_items %}
+                <tr>
+                <td><input type="checkbox" name="delete_items" value="{{ paged_item }}"></td>
+                <td>
+                    {% if paged_item.itemphoto_set.first %}
+                        <img src= "{{ MEDIA_URL }}{{ paged_item.itemphoto_set.first }}" class="img-thumbnail" width="100" height="100">
+                    {% else %}
+                        <img src= "{% static "NoImage.jpg" %}" class="img-thumbnail" width="100" height="100">
+                    {% endif %}
+                </td>
+                <td><a href = "{% url 'edit_item' paged_item %}">{{ paged_item }}</a></td>
+                <td>{{ paged_item.identification.title }}</td>
+                <td>{{ paged_item.identification.category }}</td>
+                <td>{{ paged_item.production.place }}</td>
+                <td>{{ paged_item.production.production_year }}</td>
+                <td>{{ paged_item.production.artist }}</td>
+                <td>{{ paged_item.usage.get_status_display }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <br>
+        {% csrf_token %}
+        <button class="btn btn-default" type="submit" value="delete_items">Delete</button>
+        </form>
+        {% endif %}
+
+        <ul class="pagination">
+            {% if paged_items.has_other_pages %}
+                {% if paged_items.has_previous %}
+                    <li class="previous"><a href="?{{ query_string }}&page={{ paged_items.previous_page_number }}">&laquo;</a>
+                {% else %}
+                    <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in paged_items.paginator.page_range %}
+                    {% if paged_items.number == i %}
+                        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                    {% else %}
+                        <li><a href="?{{ query_string }}&page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if paged_items.has_next %}
+                    <li class="next"><a href="?{{ query_string }}&page={{ paged_items.next_page_number }}">&raquo;</a>
+                {% else %}
+                    <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </div>
+
+{%  endblock %}
+
+
+
+
+
+<!-- pre bootstrap3
+ <h1>Add a Category</h1>
+        <div class="jumbotron">
+            <form role="form" id="category_form" method="post" action="{% url 'add_category' %}">
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                {% for field in form.visible_fields %}
+                    {{ field.errors }}
+                    {{ field.help_text }}
+                    {{ field }}
+                {% endfor %}
+
+                <button class="btn btn-primary" type="submit" name="submit">Create Category</button>
+            </form>
+        </div>
+-->
+
+<!-- pre bootstrap
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rango</title>
+</head>
+
+<body>
+    <h1>Add a Category</h1>
+    <div>
+        <form id="category_form" method="post" action="/rango/add_category/">
+            {% csrf_token %}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            {% for field in form.visible_fields %}
+                {{ field.errors }}
+                {{ field.help_text }}
+                {{ field }}
+            {% endfor %}
+            <input type="submit" name="submit" value="Create Category" />
+        </form>
+    </div>
+</body>
+</html>
+-->

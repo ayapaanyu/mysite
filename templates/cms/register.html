@@ -1,0 +1,32 @@
+{% extends 'cms/base.html'%}
+{% load staticfiles %}
+
+{% block title_block %}
+    Registration
+{% endblock %}
+
+{% block body_block %}
+<h1>Register Here</h1>
+    {% if registered %}
+        Rango says: <strong>thank you for registering!</strong>
+        <a href="/cms/"> Return to the homepage.</a>
+    {%  else %}
+        Rango says: <strong>register here!</strong>
+        <form id="user_form" method="post" action="/cms/register/" enctype="multipart/form-data">
+
+        {% csrf_token %}
+
+        <!-- Display each form -->
+        {{ user_form.as_p }}
+        {{ profile_form.as_p }}
+
+        <!-- Provide a button to click to submit the form. -->
+        <input type="submit" name="submit" value="Register" />
+    </form>
+    {% endif %}
+{% endblock %}
+
+
+<!-- pre bootstrap
+
+-->

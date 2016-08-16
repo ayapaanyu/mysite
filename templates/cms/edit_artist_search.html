@@ -1,0 +1,47 @@
+{% extends "cms/base.html" %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title_block %} Edit Artist{% endblock %}
+
+{% block body_block %}
+    <div class="page-header">
+        <h1>Edit Artist</h1>
+    </div>
+
+    <div class="container">
+        {% if artists %}
+            <form method="get" action="{% url 'delete_artist' %}">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Name</th>
+                    <th>Born</th>
+                    <th>Died</th>
+                    <th>Description</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {%  for artist in artists %}
+                    <tr>
+                    <td><input type="checkbox" name="delete_artists" value="{{ artist.name }}"></td>
+                    <td><a href = "{% url 'edit_artist' artist.slug %}">{{ artist.name }}</td>
+                    <td>{{ artist.born }}</td>
+                    <td>{{ artist.died }}</td>
+                    <td>{{ artist.artist_description }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            {% csrf_token %}
+            <button class="btn btn-default" type="submit" value="delete_artists">Delete</button>
+            </form>
+
+        {%  else %}
+            <strong>There are no artists present.</strong>
+        {%  endif %}
+    </div>
+
+{%  endblock %}

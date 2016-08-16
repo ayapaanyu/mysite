@@ -1,0 +1,41 @@
+{% extends "cms/base.html" %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title_block %} Edit Category{% endblock %}
+
+{% block body_block %}
+    <div class="page-header">
+        <h1>Edit Category</h1>
+    </div>
+
+    <div class="container">
+        {% if categories %}
+            <form method="get" action="{% url 'delete_category' %}">
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {%  for category in categories %}
+                    <tr>
+                    <td><input type="checkbox" name="delete_categories" value="{{ category.name }}"></td>
+                    <td><a href = "{% url 'edit_category' category.slug %}">{{ category.name }}</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <br>
+            {% csrf_token %}
+            <button class="btn btn-default" type="submit" value="delete_categories">Delete</button>
+            </form>
+
+        {%  else %}
+            <strong>There are no categories present.</strong>
+        {%  endif %}
+    </div>
+
+{%  endblock %}

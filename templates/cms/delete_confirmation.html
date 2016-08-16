@@ -1,0 +1,19 @@
+{% extends 'cms/base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title_block %}
+    Delete_Category
+{% endblock %}
+
+{% block body_block %}
+    <div class="container">
+        <form method="post" action="">
+            {% csrf_token %}
+            <div class="alert alert-warning" role="alert">
+            Are you sure you want to delete "{{ object }}" ?
+            </div>
+            <button class="btn btn-primary" type="submit" value="Submit">Delete</button>
+        </form>
+
+{% endblock %}

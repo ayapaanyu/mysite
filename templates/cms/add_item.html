@@ -1,0 +1,104 @@
+{% extends "cms/base.html" %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title_block %} Add Item {% endblock %}
+
+{% block body_block %}
+<div class="container">
+    <h1 class="form-signin-heading">Add Item</h1>
+    <form method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="col-md-3">
+            {{ item_photo_formset.management_form }}
+            {% for form in item_photo_formset %}
+                {% bootstrap_form form%}
+            {% endfor %}
+        </div>
+
+        <div class="col-md-9">
+            <div class="page-header">
+                {% bootstrap_form item_form %}
+            </div>
+            <div>
+                <table class="table table-condensed">
+                <tbody>
+                    <tr>
+                        {% bootstrap_form identification_form layout="horizontal"%}
+                    </tr>
+                    <tr>
+                        {% bootstrap_form production_form layout="horizontal" %}
+                    </tr>
+                    <tr>
+                        {% bootstrap_form location_form layout="horizontal"%}
+                    </tr>
+                    <tr>
+                        {% bootstrap_form usage_form layout="horizontal"%}
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+
+            <ul class="nav nav-tabs">
+                  <li class="active"><a data-toggle="tab" href="#description">Description</a></li>
+                  <li><a data-toggle="tab" href="#entry">Entry</a></li>
+                  <li><a data-toggle="tab" href="#exit">Exit</a></li>
+                  <li><a data-toggle="tab" href="#loan_in">Loan In</a></li>
+                  <li><a data-toggle="tab" href="#loan_out">Loan Out</a></li>
+            </ul>
+
+            <div class="tab-content">
+              <div id="description" class="tab-pane fade in active">
+                    <br>
+                    <table>
+                        <tr>
+                            {% bootstrap_form description_form layout="horizontal"%}
+                        </tr>
+                    </table>
+              </div>
+              <div id="entry" class="tab-pane fade">
+                    <br>
+                    <table>
+                        <tr>
+                            {{ entry_formset.management_form }}
+                            {% bootstrap_formset entry_formset layout="horizontal"%}
+                        </tr>
+                    </table>
+              </div>
+              <div id="exit" class="tab-pane fade">
+                    <br>
+                    <table>
+                        <tr>
+                            {{ exit_formset.management_form }}
+                            {% bootstrap_formset exit_formset layout="horizontal"%}
+                        </tr>
+
+                    </table>
+              </div>
+              <div id="loan_in" class="tab-pane fade">
+                    <br>
+                    <table>
+                        <tr>
+                            {{ loan_in_formset.management_form }}
+                            {% bootstrap_formset loan_in_formset layout="horizontal"%}
+                        </tr>
+                    </table>
+              </div>
+              <div id="loan_out" class="tab-pane fade">
+                    <br>
+                    <table>
+                        <tr>
+                            {{ loan_out_formset.management_form }}
+                            {% bootstrap_formset loan_out_formset layout="horizontal"%}
+                        </tr>
+                    </table>
+              </div>
+            </div>
+
+             <br/>
+             <button class="btn btn-primary" type="submit" name="submit">Submit</button>
+             <a href="{% url 'add_item' %}" class="btn btn-default">Clear All</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

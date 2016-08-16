@@ -1,0 +1,113 @@
+{% extends 'cms/base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title_block %}
+    {{ item.item_id }}
+{% endblock %}
+
+{% block body_block %}
+<div class="container">
+    {% if item and usage.status != "EX" %}
+        <div  class="col-md-4">
+            {% if photos %}
+                {% for photo in photos %}
+                    <br><br>
+                    <img src="{{ photo.picture.url }}" class="img-thumbnail">
+                {% endfor %}
+            {% else %}
+                <br><br>
+                <img src= "{% static "NoImage.jpg" %}" class="img-thumbnail">
+            {% endif %}
+        </div>
+
+        <div class="col-md-8">
+            <div class="page-header">
+                {% if identification %}
+                    <h3>{{ identification.title }}</h3>
+            </div>
+            <div>
+                <table class="table table-condensed">
+                <tbody>
+                    <tr>
+                        <td><b>Edition</b></td>
+                        <td>{{ identification.edition }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Series</b></td>
+                        <td>{{ identification.series }}</td>
+                    </tr>
+                {% endif %}
+                {% if production %}
+                    <tr>
+                        <td><b>Place</b></td>
+                        <td>{{ production.place }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Date</b></td>
+                        <td>{{ production.production_year }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Artist</b></td>
+                        <td>{{ production.artist }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Technique</b></td>
+                        <td>{{ production.technique }}</td>
+                    </tr>
+                {% endif %}
+                    <tr>
+                        <td><b>Item ID</b></td>
+                        <td>{{ item.item_id }}</td>
+                    </tr>
+                {% if location %}
+                    <tr>
+                        <td><b>Location</b></td>
+                    {% if usage.status == "DP" %}
+                        <td>{{ location.location }}</td>
+                    {% else %}
+                        <td>{{ usage.get_status_display }} until {{ location.location_date }}</td>
+                    {% endif %}
+                    </tr>
+                {% endif %}
+                </tbody>
+                </table>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Description</h3>
+                </div>
+                <div class="panel-body">
+                    {% if description %}
+                        <table>
+                            <tr>
+                               <td><b>Dimension&nbsp;&nbsp;&nbsp;</b></td>
+                               <td>{% if description.width != 0 %} Width: {{ description.width }} cm {% endif %}
+                                   {% if description.height != 0 %} Height: {{ description.height }} cm {% endif %}
+                                   {% if description.depth != 0 %} Depth: {{ description.depth }} cm {% endif %}
+                                   {% if description.weight != 0 %} Weight: {{ description.weight }} kg {% endif %}
+                               </td>
+                            </tr>
+                            <tr>
+                               <td><b>Condition&nbsp;&nbsp;&nbsp;</b></td>
+                               <td>{{ description.condition }}</td>
+                            </tr>
+                            <tr>
+                               <td><b>Subject&nbsp;&nbsp;&nbsp;</b></td>
+                               <td>{{ description.subject }}</td>
+                            </tr>
+                        </table>
+                        <br>
+                        {{ description.note }}
+                    {% else %}
+                        <strong>No description currently in this item.</strong>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+    {% else %}
+        The specified item does not exist!
+    {% endif %}
+</div>
+{% endblock %}

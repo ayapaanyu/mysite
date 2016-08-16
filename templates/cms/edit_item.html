@@ -1,0 +1,354 @@
+{% extends 'cms/base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title_block %}
+    Edit_{{ item.item_id }}
+{% endblock %}
+
+{% block body_block %}
+<div class="container">
+    <h1 class="form-signin-heading">Edit Item</h1>
+    <form method="post" action="" enctype="multipart/form-data">
+    {% csrf_token %}
+        <div class="col-md-3">
+            <br>
+            <b>Current Photo</b>
+            {% if photos %}
+                {% for photo in photos %}
+                    <img src="{{ photo.picture.url }}" class="img-thumbnail">
+                {% endfor %}
+            {% else %}
+                    <br>No Photo
+            {% endif %}
+            <br>
+            {{ formsetE.management_form }}
+            {% for form in formsetE %}
+                {% bootstrap_form form %}
+            {% endfor %}
+        </div>
+
+        <div class="col-md-9">
+            <div class="page-header">
+                {% bootstrap_form formA %}
+            </div>
+            <div>
+                <table class="table table-condensed">
+                <tbody>
+                    <tr>
+                        {% bootstrap_form formB layout="horizontal"%}
+                    </tr>
+                    <tr>
+                        {% bootstrap_form formC layout="horizontal" %}
+                    </tr>
+                    <tr>
+                        {% bootstrap_form formD layout="horizontal"%}
+                    </tr>
+                    <tr>
+                        {% bootstrap_form formE layout="horizontal"%}
+                    </tr>
+                </tbody>
+                </table>
+            </div>
+
+            <ul class="nav nav-tabs">
+                  <li class="active"><a data-toggle="tab" href="#description">Description</a></li>
+                  <li><a data-toggle="tab" href="#entry">Entry</a></li>
+                  <li><a data-toggle="tab" href="#exit">Exit</a></li>
+                  <li><a data-toggle="tab" href="#loan_in">Loan In</a></li>
+                  <li><a data-toggle="tab" href="#loan_out">Loan Out</a></li>
+            </ul>
+
+            <div class="tab-content">
+              <div id="description" class="tab-pane fade in active">
+                    <br>
+                    <table>
+                        <tr>
+                            {% bootstrap_form formF layout="horizontal"%}
+                        </tr>
+                    </table>
+              </div>
+              <div id="entry" class="tab-pane fade">
+                    <br>
+                    <table>
+                        <tr>
+                            {{ formsetA.management_form }}
+                            {% bootstrap_formset formsetA layout="horizontal"%}
+                        </tr>
+                    </table>
+              </div>
+              <div id="exit" class="tab-pane fade">
+                    <br>
+                    <table>
+                        <tr>
+                            {{ formsetB.management_form }}
+                            {% bootstrap_formset formsetB layout="horizontal"%}
+                        </tr>
+
+                    </table>
+              </div>
+              <div id="loan_in" class="tab-pane fade">
+                    <br>
+                    <table>
+                        <tr>
+                            {{ formsetC.management_form }}
+                            {% bootstrap_formset formsetC layout="horizontal"%}
+                        </tr>
+                    </table>
+              </div>
+              <div id="loan_out" class="tab-pane fade">
+                    <br>
+                    <table>
+                        <tr>
+                            {{ formsetD.management_form }}
+                            {% bootstrap_formset formsetD layout="horizontal"%}
+                        </tr>
+                    </table>
+              </div>
+            </div>
+
+             <br/>
+             <button class="btn btn-primary" type="submit" name="submit">Update</button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+
+<!--
+<div class="container">
+    {% if item %}
+        <div class="col-md-4">
+            {% if photos %}
+                {% for photo in photos %}
+                    <img class="img-responsive" src={{ photo.picture }}>
+                {% endfor %}
+            {% else %}
+                <strong>No Photo currently in this item.</strong>
+            {% endif %}
+        </div>
+
+        <div class="col-md-8">
+            <div class="page-header">
+                {% if identification %}
+                    <h3>{{ identification.title }}</h3>
+            </div>
+            <div>
+                <table class="table table-condensed">
+                <tbody>
+                    <tr>
+                        <td><b>Edition</b></td>
+                        <td>{{ identification.edition }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Series</b></td>
+                        <td>{{ identification.series }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Category</b></td>
+                        <td>{{ identification.category }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Stock</b></td>
+                        <td>{{ identification.stock }}</td>
+                    </tr>
+                {% endif %}
+                {% if production %}
+                    <tr>
+                        <td><b>Place</b></td>
+                        <td>{{ production.place }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Date</b></td>
+                        <td>{{ production.production_year }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Artist</b></td>
+                        <td>{{ production.artist }}</td>
+                    </tr>
+                    <tr>
+                        <td><b>Technique</b></td>
+                        <td>{{ production.technique }}</td>
+                    </tr>
+                {% endif %}
+                    <tr>
+                        <td><b>Item ID</b></td>
+                        <td>{{ item.item_id }}</td>
+                    </tr>
+                {% if usage %}
+                    <tr>
+                        <td><b>Status</b></td>
+                        <td>{{ usage.get_status_display }}</td>
+                    </tr>
+                {% endif %}
+                {% if location %}
+                    <tr>
+                        <td><b>Location</b></td>
+                        <td>{{ location.location }} until {{ location.location_date }}</td>
+                    </tr>
+                {% endif %}
+                </tbody>
+                </table>
+            </div>
+
+            <ul class="nav nav-tabs">
+              <li class="active"><a data-toggle="tab" href="#description">Description</a></li>
+              <li><a data-toggle="tab" href="#entry">Entry</a></li>
+              <li><a data-toggle="tab" href="#exit">Exit</a></li>
+              <li><a data-toggle="tab" href="#loan_in">Loan In</a></li>
+              <li><a data-toggle="tab" href="#loan_out">Loan Out</a></li>
+            </ul>
+
+            <div class="tab-content">
+              <div id="description" class="tab-pane fade in active">
+                {% if description %}
+                    <br>
+                    <table>
+                        <tr>
+                            <td><b>Dimension&nbsp;&nbsp;&nbsp;</b></td>
+                            <td>{% if description.width != 0 %} Width: {{ description.width }} cm {% endif %}
+                                {% if description.height != 0 %} Height: {{ description.height }} cm {% endif %}
+                                {% if description.depth != 0 %} Depth: {{ description.depth }} cm {% endif %}
+                                {% if description.weight != 0 %} Weight: {{ description.weight }} kg {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                           <td><b>Condition&nbsp;&nbsp;&nbsp;</b></td>
+                           <td>{{ description.condition }}</td>
+                        </tr>
+                        <tr>
+                           <td><b>Subject&nbsp;&nbsp;&nbsp;</b></td>
+                           <td>{{ description.subject }}</td>
+                        </tr>
+                    </table>
+                    <br>
+                    {{ description.note }}
+                {% else %}
+                    <strong><br>No description currently in this item.</strong>
+                {% endif %}
+              </div>
+              <div id="entry" class="tab-pane fade">
+                {% if entries %}
+                    {% for entry in entries %}
+                        <br>
+                        <table>
+                            <tr>
+                                <td><b>Entry ID&nbsp;&nbsp;&nbsp;</b></td>
+                                <td>{{ entry.entry_id }}</td>
+                            </tr>
+                            <tr>
+                               <td><b>Entry Date&nbsp;&nbsp;&nbsp;</b></td>
+                               <td>{{ entry.entry_date }}</td>
+                            </tr>
+                            <tr>
+                               <td><b>Owner&nbsp;&nbsp;&nbsp;</b></td>
+                               <td>{{ entry.owner }}</td>
+                            </tr>
+                            <tr>
+                               <td><b>Note&nbsp;&nbsp;&nbsp;</b></td>
+                               <td>{{ entry.entry_note }}</td>
+                            </tr>
+                        </table>
+                    {% endfor %}
+                {% else %}
+                    <strong><br>No Entry currently in this item.</strong>
+                {% endif %}
+              </div>
+              <div id="exit" class="tab-pane fade">
+                {% if exits %}
+                    {% for exit in exits %}
+                        <br>
+                        <table>
+                            <tr>
+                                <td><b>Exit ID&nbsp;&nbsp;&nbsp;</b></td>
+                                <td>{{ exit.exit_id }}</td>
+                            </tr>
+                            <tr>
+                               <td><b>Exit Date&nbsp;&nbsp;&nbsp;</b></td>
+                               <td>{{ exit.exit_date }}</td>
+                            </tr>
+                            <tr>
+                               <td><b>Destination&nbsp;&nbsp;&nbsp;</b></td>
+                               <td>{{ exit.exit_destination }}</td>
+                            </tr>
+                            <tr>
+                               <td><b>Note&nbsp;&nbsp;&nbsp;</b></td>
+                               <td>{{ exit.exit_note }}</td>
+                            </tr>
+                        </table>
+                    {% endfor %}
+                {% else %}
+                    <strong><br>No Exit currently in this item.</strong>
+                {% endif %}
+              </div>
+              <div id="loan_in" class="tab-pane fade">
+                {% if loan_ins %}
+                    {% for loan_in in loan_ins %}
+                        <br>
+                        <table>
+                            <tr>
+                                <td><b>Loan In ID&nbsp;&nbsp;&nbsp;</b></td>
+                                <td>{{ loan_in.loan_in_id }}</td>
+                            </tr>
+                            <tr>
+                               <td><b>Loan In Date&nbsp;&nbsp;&nbsp;</b></td>
+                               <td>{{ loan_in.loan_in_date }}</td>
+                            </tr>
+                            <tr>
+                               <td><b>Lender&nbsp;&nbsp;&nbsp;</b></td>
+                               <td>{{ loan_in.lender }}</td>
+                            </tr>
+                            <tr>
+                               <td><b>Return Out Date&nbsp;&nbsp;&nbsp;</b></td>
+                               <td>{{ loan_in.return_out_date }}</td>
+                            </tr>
+                            <tr>
+                               <td><b>Note&nbsp;&nbsp;&nbsp;</b></td>
+                               <td>{{ loan_in.loan_in_note }}</td>
+                            </tr>
+                        </table>
+                    {% endfor %}
+                {% else %}
+                    <strong><br>No Loan In currently in this item.</strong>
+                {% endif %}
+              </div>
+              <div id="loan_out" class="tab-pane fade">
+                {% if loan_outs %}
+                    {% for loan_out in loan_outs %}
+                        <br>
+                        <table>
+                            <tr>
+                                <td><b>Loan Out ID&nbsp;&nbsp;&nbsp;</b></td>
+                                <td>{{ loan_out.loan_out_id }}</td>
+                            </tr>
+                            <tr>
+                               <td><b>Loan Out Date&nbsp;&nbsp;&nbsp;</b></td>
+                               <td>{{ loan_out.loan_out_date }}</td>
+                            </tr>
+                            <tr>
+                               <td><b>Borrower&nbsp;&nbsp;&nbsp;</b></td>
+                               <td>{{ loan_out.borrower }}</td>
+                            </tr>
+                            <tr>
+                               <td><b>Return In Date&nbsp;&nbsp;&nbsp;</b></td>
+                               <td>{{ loan_out.return_in_date }}</td>
+                            </tr>
+                            <tr>
+                               <td><b>Note&nbsp;&nbsp;&nbsp;</b></td>
+                               <td>{{ loan_out.loan_out_note }}</td>
+                            </tr>
+                        </table>
+                    {% endfor %}
+                {% else %}
+                    <strong><br>No Loan Out currently in this item.</strong>
+                {% endif %}
+              </div>
+            </div>
+        </div>
+    {% else %}
+        The specified item does not exist!
+    {% endif %}
+</div>
+-->
+
+

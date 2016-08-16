@@ -1,0 +1,34 @@
+{% extends 'cms/base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title_block %}
+    Edit_{{ category.name }}
+{% endblock %}
+
+{% block body_block %}
+<div>
+    {% if category %}
+        <h2>{{ category.name }}</h2>
+        <br>
+        <div class="well well-lg">
+            <form id="category_form" method="post" action="">
+                {% csrf_token %}
+                {% bootstrap_form form %}
+                <br/>
+                <button class="btn btn-primary" type="submit" name="submit">Update</button>
+                <a href="{% url 'edit_category_search' %}" class="btn btn-default">Cancel</a>
+            </form>
+
+        </div>
+
+    {% else %}
+        The specified category does not exist!
+    {% endif %}
+
+
+</div>
+{% endblock %}
+
+
+

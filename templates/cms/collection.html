@@ -1,0 +1,134 @@
+{% extends 'cms/base.html' %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title_block %}Collection{% endblock %}
+
+{% block body_block %}
+    <div class="page-header">
+        <h1>Collection</h1>
+    </div>
+
+    <div class="container">
+        <form id="general" method="get" action="">
+            {% bootstrap_form general_form %}
+            <button class="btn btn-primary" type="submit" name="general" value="general">Search</button>
+        </form>
+
+    <br>
+
+    <div class="container">
+        <div class="col-md-6">
+            {% if categories %}
+            <h3>Categories</h3>
+            <div class="list-group">
+                {%  for category in categories %}
+                        <a href = "{% url 'show_category' category.slug %}" class="list-group-item">{{ category.name }}</a>
+                    {%  endfor %}
+            {%  endif %}
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            {% if artists %}
+            <h3>Artists</h3>
+            <div class="list-group">
+                {%  for artist in artists %}
+                    <a href = "{% url 'show_artist' artist.slug %}" class="list-group-item">{{ artist.name }}</a>
+                {%  endfor %}
+            {%  endif %}
+            </div>
+        </div>
+
+        {% if paged_items %}
+            <div class="pull-right">
+                {{ paged_items.start_index }} to {{ paged_items.end_index }} of {{ paged_items.paginator.count }}
+            </div>
+            <table class="table">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Item ID</th>
+                    <th>Title</th>
+                    <th>Category</th>
+                    <th>Place</th>
+                    <th>Date</th>
+                    <th>Artist</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for paged_item in paged_items %}
+                        <tr>
+                            <td>
+                                {% if paged_item.itemphoto_set.first %}
+                                <img src="{{ MEDIA_URL }}{{ paged_item.itemphoto_set.first }}" class="img-thumbnail" width="100" height="100">
+                                {% else %}
+                                    <img src= "{% static "NoImage.jpg" %}" class="img-thumbnail" width="100" height="100">
+                                {% endif %}
+                            </td>
+                            <td><a href = "{% url 'show_item' paged_item %}">{{ paged_item }}</a></td>
+                            <td>{{ paged_item.identification.title }}</td>
+                            <td>{{ paged_item.identification.category }}</td>
+                            <td>{{ paged_item.production.place }}</td>
+                            <td>{{ paged_item.production.production_year }}</td>
+                            <td>{{ paged_item.production.artist }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endif %}
+
+        <ul class="pagination">
+            {% if paged_items.has_other_pages %}
+                {% if paged_items.has_previous %}
+                    <li class="previous"><a href="?{{ query_string }}&page={{ paged_items.previous_page_number }}">&laquo;</a>
+                {% else %}
+                    <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in paged_items.paginator.page_range %}
+                    {% if paged_items.number == i %}
+                        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                    {% else %}
+                        <li><a href="?{{ query_string }}&page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if paged_items.has_next %}
+                    <li class="next"><a href="?{{ query_string }}&page={{ paged_items.next_page_number }}">&raquo;</a>
+                {% else %}
+                    <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+            {% endif %}
+        </ul>
+    </div>
+
+{%  endblock %}
+
+<!-- pre chapter 8
+
+<!DOCTYPE html>
+<html lang="en">
+
+{%  load static %}
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Rango</title>
+    </head>
+
+    <body>
+        <h1>About</h1>
+
+        <div>
+            This tutorial has been put together by ayapaanyu. <br />
+            <strong>{{ boldmessage }}</strong><br />
+        </div>
+
+        <div>
+            <a href="{% url 'about' %}/">About</a><br />
+            <img src="{% static "rango.jpg" %}" alt="Picture of Rango" />
+        </div>
+    </body>
+
+</html>
+
+-->

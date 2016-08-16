@@ -1,0 +1,69 @@
+{% extends "cms/base.html" %}
+{% load staticfiles %}
+{% load bootstrap3 %}
+
+{% block title_block %}
+    Add Category
+{% endblock %}
+
+{% block body_block %}
+    <form id="category_form" method="post" action="{% url 'add_category' %}">
+        <h1 class="form-signin-heading">Add Category</h1>
+        {% csrf_token %}
+        {% bootstrap_form form %}
+
+    <br/>
+    <button class="btn btn-primary" type="submit" name="submit">Submit</button>
+    <a href="{% url 'add_category' %}" class="btn btn-default">Clear All</a>
+
+    </form>
+{% endblock %}
+
+
+
+<!-- pre bootstrap3
+ <h1>Add a Category</h1>
+        <div class="jumbotron">
+            <form role="form" id="category_form" method="post" action="{% url 'add_category' %}">
+                {% csrf_token %}
+                {% for hidden in form.hidden_fields %}
+                    {{ hidden }}
+                {% endfor %}
+                {% for field in form.visible_fields %}
+                    {{ field.errors }}
+                    {{ field.help_text }}
+                    {{ field }}
+                {% endfor %}
+
+                <button class="btn btn-primary" type="submit" name="submit">Create Category</button>
+            </form>
+        </div>
+-->
+
+<!-- pre bootstrap
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Rango</title>
+</head>
+
+<body>
+    <h1>Add a Category</h1>
+    <div>
+        <form id="category_form" method="post" action="/rango/add_category/">
+            {% csrf_token %}
+            {% for hidden in form.hidden_fields %}
+                {{ hidden }}
+            {% endfor %}
+            {% for field in form.visible_fields %}
+                {{ field.errors }}
+                {{ field.help_text }}
+                {{ field }}
+            {% endfor %}
+            <input type="submit" name="submit" value="Create Category" />
+        </form>
+    </div>
+</body>
+</html>
+-->

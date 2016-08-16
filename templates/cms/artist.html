@@ -1,0 +1,92 @@
+{% extends 'cms/base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+    {{ artist.name }}
+{% endblock %}
+
+{% block body_block %}
+<div>
+    {% if artist %}
+        <h2>{{ artist.name }}</h2>
+        <br>
+        <div class="well well-lg">
+            born {% if artist.born != 0 %}{{ artist.born }} {% endif %}
+                - died {% if artist.died != 0 %} {{ artist.died }} {% endif %}<br>
+            <br>
+            {{ artist.artist_description }}
+
+        </div>
+        <div class="container">
+            {% if paged_items %}
+                <div class="pull-right">
+                {{ paged_items.start_index }} to {{ paged_items.end_index }} of {{ paged_items.paginator.count }}
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Item ID</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Place</th>
+                            <th>Date</th>
+                            <th>Artist</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for paged_item in paged_items %}
+                        <tr>
+                            <td>
+                                {% if paged_item.itemphoto_set.first %}
+                                    <img src= "{{ MEDIA_URL }}{{ paged_item.itemphoto_set.first }}" class="img-thumbnail" width="100" height="100">
+                                {% else %}
+                                    <img src= "{% static "NoImage.jpg" %}" class="img-thumbnail" width="100" height="100">
+                                {% endif %}
+                            </td>
+                            <td><a href = "{% url 'show_item' paged_item %}">{{ paged_item }}</a></td>
+                            <td>{{ paged_item.identification.title }}</td>
+                            <td>{{ paged_item.identification.category }}</td>
+                            <td>{{ paged_item.production.place }}</td>
+                            <td>{{ paged_item.production.production_year }}</td>
+                            <td>{{ paged_item.production.artist }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <strong>No items currently in this artist.</strong>
+            {% endif %}
+
+            <ul class="pagination">
+            {% if paged_items.has_other_pages %}
+                {% if paged_items.has_previous %}
+                    <li class="previous"><a href="?page={{ paged_items.previous_page_number }}">&laquo;</a>
+                {% else %}
+                    <li class="disabled"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in paged_items.paginator.page_range %}
+                    {% if paged_items.number == i %}
+                        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                    {% else %}
+                        <li><a href="?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if paged_items.has_next %}
+                    <li class="next"><a href="?page={{ paged_items.next_page_number }}">&raquo;</a>
+                {% else %}
+                    <li class="disabled"><span>&raquo;</span></li>
+                {% endif %}
+            {% endif %}
+            </ul>
+        </div>
+
+    {% else %}
+        The specified artist does not exist!
+    {% endif %}
+
+</div>
+{% endblock %}
+
+
+
